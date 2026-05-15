@@ -1,7 +1,10 @@
 import { imageHosts } from './image-hosts.config.mjs';
 
 /** @type {import('next').NextConfig} */
+const isProductionBuild = process.env.NODE_ENV === 'production';
+
 const nextConfig = {
+  ...(isProductionBuild ? { output: 'export' } : {}),
   productionBrowserSourceMaps: true,
   distDir: process.env.DIST_DIR || '.next',
   typescript: {
@@ -11,6 +14,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: imageHosts,
     minimumCacheTTL: 60,
   },

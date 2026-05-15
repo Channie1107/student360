@@ -1,10 +1,7 @@
 'use client';
-
 import React, { useState } from 'react';
-import { ChevronDown, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, SlidersHorizontal, Lock } from 'lucide-react';
 import { toast } from 'sonner';
-
-import { useSchoolData } from '@/hooks/useSchoolData';
 
 interface FilterOption {
   value: string;
@@ -14,6 +11,7 @@ interface FilterOption {
 const yearOptions: FilterOption[] = [
   { value: '25-26', label: 'Year: 25-26' },
   { value: '24-25', label: 'Year: 24-25' },
+  { value: '23-24', label: 'Year: 23-24' },
 ];
 
 const termOptions: FilterOption[] = [
@@ -23,63 +21,28 @@ const termOptions: FilterOption[] = [
 ];
 
 const monthOptions: FilterOption[] = [
+  { value: 'september', label: 'September' },
+  { value: 'october', label: 'October' },
   { value: 'may', label: 'May' },
-  { value: 'april', label: 'April' },
-  { value: 'march', label: 'March' },
-  { value: 'february', label: 'February' },
-  { value: 'january', label: 'January' },
-];
-
-const gradeOptions: FilterOption[] = [
-  { value: 'All', label: 'Grade: All' },
-  { value: '10', label: 'Grade 10' },
-  { value: '11', label: 'Grade 11' },
-  { value: '12', label: 'Grade 12' },
-];
-
-const classOptions: FilterOption[] = [
-  { value: 'All', label: 'Class: All' },
-  { value: '10A', label: 'Class 10A' },
-  { value: '10B', label: 'Class 10B' },
-  { value: '10C', label: 'Class 10C' },
-  { value: '11A', label: 'Class 11A' },
-  { value: '11B', label: 'Class 11B' },
-  { value: '11C', label: 'Class 11C' },
-  { value: '12A', label: 'Class 12A' },
-  { value: '12B', label: 'Class 12B' },
-  { value: '12C', label: 'Class 12C' },
-];
-
-const programOptions: FilterOption[] = [
-  { value: 'standard-ibdp', label: 'Standard & IBDP' },
-  { value: 'standard', label: 'Standard' },
-  { value: 'ibdp', label: 'IBDP Only' },
 ];
 
 const subjectOptions: FilterOption[] = [
   { value: 'all', label: 'Subject: All' },
   { value: 'math', label: 'Mathematics' },
-  { value: 'science', label: 'Science' },
+  { value: 'literature', label: 'Literature' },
   { value: 'english', label: 'English' },
+  { value: 'physics', label: 'Physics' },
+  { value: 'chemistry', label: 'Chemistry' },
   { value: 'history', label: 'History' },
 ];
 
-interface SelectDropdownProps {
-  value: string;
-  options: FilterOption[];
-  onChange: (val: string) => void;
-  className?: string;
-}
-
-function SelectDropdown({ value, options, onChange, className = '' }: SelectDropdownProps) {
-  const selected = options.find((o) => o.value === value);
+function SelectDropdown({ value, options, onChange, className = '' }: { value: string; options: FilterOption[]; onChange: (val: string) => void; className?: string }) {
   return (
     <div className={`relative ${className}`}>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="appearance-none bg-white border border-border rounded-lg pl-3 pr-7 py-1.5 text-xs font-medium text-foreground cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
-        style={{ fontSize: '12px' }}
       >
         {options.map((opt) => (
           <option key={`opt-${opt.value}`} value={opt.value}>
@@ -95,29 +58,35 @@ function SelectDropdown({ value, options, onChange, className = '' }: SelectDrop
   );
 }
 
-export default function FilterBar() {
-  const { 
-    selectedGrade, setSelectedGrade,
-    selectedClass, setSelectedClass,
-    academicYear, setAcademicYear
-  } = useSchoolData();
+function LockedSelectDropdown({ label }: { label: string }) {
+  return (
+    <div className="relative">
+      <div className="appearance-none bg-muted/30 border border-border rounded-lg pl-3 pr-7 py-1.5 text-xs font-medium text-muted-foreground cursor-not-allowed flex items-center justify-between opacity-80">
+        <span>{label}</span>
+      </div>
+      <Lock
+        size={10}
+        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground opacity-70 pointer-events-none"
+      />
+    </div>
+  );
+}
 
+export default function FilterBar() {
+  const [year, setYear] = useState('25-26');
   const [term, setTerm] = useState('term1');
-  const [month, setMonth] = useState('may');
-  const [program, setProgram] = useState('standard-ibdp');
+  const [month, setMonth] = useState('september');
   const [subject, setSubject] = useState('all');
 
   const handleApply = () => {
     toast.success('Filters applied — dashboard refreshed', {
-      description: `${academicYear} · Grade ${selectedGrade}`,
+      description: `${year} · ${term} · ${month} · Class 11A`,
       duration: 3000,
     });
   };
 
   return (
-    <div
-      className="bg-white border border-border rounded-2xl shadow-card px-4 py-3 mb-5 fade-in"
-    >
+    <div className="bg-white border border-border rounded-2xl shadow-card px-4 py-3 mb-5 fade-in">
       <div className="flex flex-wrap items-center gap-4">
         {/* Time Period */}
         <div className="flex flex-col gap-1">
@@ -127,7 +96,7 @@ export default function FilterBar() {
             </span>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
-            <SelectDropdown value={academicYear} options={yearOptions} onChange={setAcademicYear} />
+            <SelectDropdown value={year} options={yearOptions} onChange={setYear} />
             <SelectDropdown value={term} options={termOptions} onChange={setTerm} />
             <SelectDropdown value={month} options={monthOptions} onChange={setMonth} />
           </div>
@@ -143,8 +112,9 @@ export default function FilterBar() {
             </span>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
-            <SelectDropdown value={selectedGrade} options={gradeOptions} onChange={setSelectedGrade} />
-            <SelectDropdown value={selectedClass} options={classOptions} onChange={setSelectedClass} />
+            <LockedSelectDropdown label="Campus: Main" />
+            <LockedSelectDropdown label="Grade: 11" />
+            <LockedSelectDropdown label="Class: 11A" />
           </div>
         </div>
 
@@ -158,7 +128,7 @@ export default function FilterBar() {
             </span>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
-            <SelectDropdown value={program} options={programOptions} onChange={setProgram} />
+            <LockedSelectDropdown label="Program: IBDP" />
             <SelectDropdown value={subject} options={subjectOptions} onChange={setSubject} />
           </div>
         </div>

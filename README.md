@@ -58,9 +58,10 @@ This project uses Tailwind CSS for styling with the following features:
 ## 📦 Available Scripts
 
 - `npm run dev` - Start development server on port 4028
-- `npm run build` - Build the application for production
-- `npm run start` - Start the development server
-- `npm run serve` - Start the production server
+- `npm run dev:next` - Start the Next.js development server on port 4028
+- `npm run build` - Build the application for production export
+- `npm run start` - Serve the exported `out/` build locally
+- `npm run serve` - Serve the exported `out/` build locally
 - `npm run lint` - Run ESLint to check code quality
 - `npm run lint:fix` - Fix ESLint issues automatically
 - `npm run format` - Format code with Prettier
@@ -72,6 +73,8 @@ Build the application for production:
   ```bash
   npm run build
   ```
+
+`npm run dev` rebuilds the static export and serves `out/` locally, which matches Firebase Hosting behavior. Route paths like `/student-profile` and `/class-compliance-data-entry-audit` resolve to their exported HTML files without an SPA catch-all rewrite.
 
 ## 📚 Learn More
 
