@@ -40,7 +40,7 @@ const principalNavItems: NavItem[] = [
   { id: 'nav-overview', label: 'Overview', href: '/', icon: <LayoutDashboard size={18} /> },
   { id: 'nav-student', label: 'Global Student Directory', href: '/student-profile', icon: <UserCircle size={18} /> },
   { id: 'nav-staff', label: 'Global Staff Directory', href: '/staff-directory', icon: <Users size={18} /> },
-  { id: 'nav-compliance', label: 'Compliance Matrix', href: '/compliance-matrix', icon: <ClipboardCheck size={18} />, badge: 3 },
+  { id: 'nav-compliance', label: 'Compliance Matrix', href: '/compliance-matrix', icon: <ClipboardCheck size={18} /> },
   { id: 'nav-admissions', label: 'Admissions & Finance', href: '/admissions-finance', icon: <CreditCard size={18} /> },
   { id: 'nav-settings', label: 'Settings', href: '/settings', icon: <Settings size={18} /> },
 ];
