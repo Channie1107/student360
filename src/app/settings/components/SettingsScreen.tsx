@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import AppLayout from '@/components/AppLayout';
 import DashboardHeader from '@/app/components/DashboardHeader';
+import { useRole } from '@/context/RoleContext';
 import { toast } from 'sonner';
 import { Eye, EyeOff, LockKeyhole, User, Mail, IdCard, ShieldCheck } from 'lucide-react';
 
@@ -27,12 +28,30 @@ function ReadOnlyField({
 }
 
 export default function SettingsScreen() {
+  const { role } = useRole();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const profile =
+    role === 'principal'
+      ? {
+          fullName: 'Dr. Helena Vance',
+          academicId: 'EMP99001',
+          email: 'helena.vance@olympiaschools.edu',
+          assignedRole: 'Senior Principal',
+          subtitle: 'Principal account profile and security management',
+        }
+      : {
+          fullName: 'Mr. James Wilson',
+          academicId: 'EMP88210',
+          email: 'james.wilson@olympiaschools.edu',
+          assignedRole: 'Homeroom Teacher - Grade 11A',
+          subtitle: 'Account profile and security management',
+        };
 
   const handleUpdatePassword = () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
@@ -53,7 +72,7 @@ export default function SettingsScreen() {
       <div className="mx-auto max-w-screen-2xl px-6 py-5 lg:px-8 xl:px-10">
         <DashboardHeader
           title="Settings"
-          subtitle="Account profile and security management"
+          subtitle={profile.subtitle}
           breadcrumb="Settings"
         />
 
@@ -70,10 +89,10 @@ export default function SettingsScreen() {
               </div>
 
               <div className="space-y-3">
-                <ReadOnlyField icon={<User size={13} className="text-slate-500" />} label="Full Name" value="Mr. James Wilson" />
-                <ReadOnlyField icon={<IdCard size={13} className="text-slate-500" />} label="Academic ID" value="EMP88210" />
-                <ReadOnlyField icon={<Mail size={13} className="text-slate-500" />} label="Primary Email" value="james.wilson@olympiaschools.edu" />
-                <ReadOnlyField icon={<ShieldCheck size={13} className="text-slate-500" />} label="Assigned Role" value="Homeroom Teacher - Grade 11A" />
+                <ReadOnlyField icon={<User size={13} className="text-slate-500" />} label="Full Name" value={profile.fullName} />
+                <ReadOnlyField icon={<IdCard size={13} className="text-slate-500" />} label="Academic ID" value={profile.academicId} />
+                <ReadOnlyField icon={<Mail size={13} className="text-slate-500" />} label="Primary Email" value={profile.email} />
+                <ReadOnlyField icon={<ShieldCheck size={13} className="text-slate-500" />} label="Assigned Role" value={profile.assignedRole} />
               </div>
             </div>
 

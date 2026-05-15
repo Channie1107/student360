@@ -49,13 +49,25 @@ export default function DashboardHeader({
     }
   };
 
-  const menuItems = [
+  const principalMenuItems = [
+    { name: 'Overview', path: '/' },
+    { name: 'Global Student Directory', path: '/student-profile' },
+    { name: 'Global Staff Directory', path: '/staff-directory' },
+    { name: 'Compliance Matrix', path: '/compliance-matrix' },
+    { name: 'Admissions & Finance', path: '/admissions-finance' },
+    { name: 'Settings', path: '/settings' },
+  ];
+
+  const teacherMenuItems = [
     { name: 'Class Overview', path: '/' },
     { name: 'Student Profile', path: '/student-profile-class-list' },
     { name: 'Compliance Data Entry', path: '/class-compliance-data-entry-audit' },
     { name: 'Tuition Status', path: '/tuition-status' },
     { name: 'Transcript Hub', path: '/transcript-hub' },
+    { name: 'Settings', path: '/settings' },
   ];
+
+  const menuItems = role === 'principal' ? principalMenuItems : teacherMenuItems;
 
   const filteredMenu = menuItems.filter((m) => m.name.toLowerCase().includes(searchValue.toLowerCase()));
 

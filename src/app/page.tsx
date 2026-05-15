@@ -4,7 +4,7 @@ import React from 'react';
 import AppLayout from '@/components/AppLayout';
 import { useSchoolData } from '@/hooks/useSchoolData';
 import DashboardHeader from './components/DashboardHeader';
-import PrincipalFilterBar from '@/components/FilterBar';
+import PrincipalExecutiveDashboard from './components/principal/PrincipalExecutiveDashboard';
 
 // Dashboard Components
 import KPIRow from './components/teacher/KPIRow';
@@ -16,21 +16,28 @@ import AlertsTimeline from './components/teacher/AlertsTimeline';
 export default function OverviewDashboardPage() {
   const { role, teacherContext } = useSchoolData();
 
+  if (role === 'principal') {
+    return (
+      <AppLayout>
+        <div className="mx-auto max-w-screen-2xl px-6 py-5 lg:px-8 xl:px-10">
+          <PrincipalExecutiveDashboard />
+        </div>
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout>
-      <div className="px-6 lg:px-8 xl:px-10 py-5 max-w-screen-2xl mx-auto">
+      <div className="mx-auto max-w-screen-2xl px-6 py-5 lg:px-8 xl:px-10">
         <DashboardHeader
-          title={role === 'principal' ? "School Overview Dashboard" : `Class Overview Dashboard (${teacherContext?.classId})`}
-          subtitle={role === 'principal' ? "Olympia Schools · Unified Dashboard" : `Grade ${teacherContext?.gradeId} · Class ${teacherContext?.classId} · Academic Year ${teacherContext?.academicYear}`}
+          title={`Class Overview Dashboard (${teacherContext?.classId})`}
+          subtitle={`Grade ${teacherContext?.gradeId} · Class ${teacherContext?.classId} · Academic Year ${teacherContext?.academicYear}`}
           breadcrumb="Overview"
         />
-        
+
         <div className="space-y-5 mt-4">
-          {/* Show global filters only for principal */}
-          {role === 'principal' && <PrincipalFilterBar />}
-          
           <KPIRow />
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
             <div className="lg:col-span-2">
               <TeacherAttendanceDonut />
@@ -39,7 +46,7 @@ export default function OverviewDashboardPage() {
               <TeacherGPABarChart />
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
             <div className="xl:col-span-2">
               <StudentsAtRiskTable />

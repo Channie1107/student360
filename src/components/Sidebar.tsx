@@ -7,6 +7,7 @@ import { useRole } from '@/context/RoleContext';
 import {
   LayoutDashboard,
   UserCircle,
+  Users,
   ClipboardCheck,
   CreditCard,
   FileText,
@@ -36,12 +37,11 @@ const teacherNavItems: NavItem[] = [
 ];
 
 const principalNavItems: NavItem[] = [
-  { id: 'nav-overview', label: 'Overview Dashboard', href: '/', icon: <LayoutDashboard size={18} /> },
-  { id: 'nav-student', label: 'Student Profile', href: '/student-profile', icon: <UserCircle size={18} /> },
+  { id: 'nav-overview', label: 'Overview', href: '/', icon: <LayoutDashboard size={18} /> },
+  { id: 'nav-student', label: 'Global Student Directory', href: '/student-profile', icon: <UserCircle size={18} /> },
+  { id: 'nav-staff', label: 'Global Staff Directory', href: '/staff-directory', icon: <Users size={18} /> },
   { id: 'nav-compliance', label: 'Compliance Matrix', href: '/compliance-matrix', icon: <ClipboardCheck size={18} />, badge: 3 },
   { id: 'nav-admissions', label: 'Admissions & Finance', href: '/admissions-finance', icon: <CreditCard size={18} /> },
-  { id: 'nav-tuition', label: 'Tuition Status', href: '/tuition-status', icon: <CreditCard size={18} /> },
-  { id: 'nav-transcript', label: 'Transcript Hub', href: '/transcript-hub', icon: <FileText size={18} /> },
   { id: 'nav-settings', label: 'Settings', href: '/settings', icon: <Settings size={18} /> },
 ];
 
@@ -108,7 +108,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <nav className="flex-1 overflow-y-auto py-3 scrollbar-thin">
         <div className="space-y-0.5 px-2">
           {!collapsed && <p className="px-3 py-2 text-2xs font-medium uppercase tracking-widest text-white/40">Main Menu</p>}
-          {teacherNavItems.map((item) => {
+          {navItems.map((item) => {
             const active = isActive(item.href);
             return (
               <Link
